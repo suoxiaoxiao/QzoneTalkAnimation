@@ -11,9 +11,11 @@
 
 static const char *kAnimationFloatCoefficient = "kAnimationFloatCoefficient";
 static const char *kAnimationbearingLayer = "kAnimationbearingLayer";
+static const char *kAnimationStatus = "kAnimationStatus";
 static NSString *const kGroupAnimationKey = @"kGroupAnimationKey";
 static NSString *const kGroupKey = @"kGroupKey";
 static NSString *const kGroupValue = @"kGroupValue";
+
 
 CG_INLINE CGPoint
 __CGPointSum(CGPoint point1, CGPoint point2)
@@ -75,6 +77,7 @@ __CGPointOffset(CGPoint point,CGFloat x,CGFloat y)
 
 @interface UITableView ()<CAAnimationDelegate>
 
+@property (nonatomic , strong)NSNumber *isAnimation;
 
 @property (nonatomic ,strong)UIView *bearingAnimation;
 
@@ -102,12 +105,36 @@ __CGPointOffset(CGPoint point,CGFloat x,CGFloat y)
     return objc_getAssociatedObject(self, kAnimationFloatCoefficient);
 }
 
+- (void)setIsAnimation:(NSNumber *)isAnimation
+{
+    objc_setAssociatedObject(self, kAnimationStatus,isAnimation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSNumber *)isAnimation
+{
+    return objc_getAssociatedObject(self, kAnimationStatus);
+}
+
+
 
 - (void)insertRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths withRowCustomAnimation:(TableViewRowAnimation)animation
 {
     switch (animation) {
         case TableViewRowAnimation3DInsertMode:
         {
+            
+            if ([self.isAnimation boolValue]){
+                //暂停动画
+                [self.bearingAnimation removeFromSuperview];
+                self.bearingAnimation = nil;
+                //直接刷新 不进行动画
+                [self reloadData];
+                //改变bool值
+                 self.isAnimation = [NSNumber numberWithBool:NO];
+                
+                return;
+            }else self.isAnimation = [NSNumber numberWithBool:YES];
+            
             //自定义动画
             NSIndexPath *indexpath = indexPaths[0];
             //拿到当前行高度
@@ -255,6 +282,7 @@ __CGPointOffset(CGPoint point,CGFloat x,CGFloat y)
         }
         [self.bearingAnimation removeFromSuperview];
         self.bearingAnimation = nil;
+        self.isAnimation = [NSNumber numberWithBool:NO];
         [self reloadData];
         
     }

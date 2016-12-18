@@ -119,10 +119,10 @@
 - (void)ceshiaddDataRefreshTable
 {
     [self.dataArray insertObject:[NSString stringWithFormat:@"第%ld个cell",self.dataArray.count + 1]atIndex:0];
-    
     NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
     self.tableView.coefficient = @(0.1);
     [self.tableView insertRowsAtIndexPaths:@[index] withRowCustomAnimation:TableViewRowAnimation3DInsertMode];
+    
 }
 
 @end
