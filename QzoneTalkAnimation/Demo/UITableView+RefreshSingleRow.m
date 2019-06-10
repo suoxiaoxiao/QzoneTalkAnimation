@@ -116,7 +116,6 @@ __CGPointOffset(CGPoint point,CGFloat x,CGFloat y)
 }
 
 
-
 - (void)insertRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths withRowCustomAnimation:(TableViewRowAnimation)animation
 {
     switch (animation) {
@@ -161,9 +160,11 @@ __CGPointOffset(CGPoint point,CGFloat x,CGFloat y)
                     diceng = sub;
                     break;
                 }
-                
             }
-            if (diceng == nil) return;
+            
+            if (diceng == nil) {
+                 return [self insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            }
             
             NSLog(@"找到了UITableViewWrapperView");
             

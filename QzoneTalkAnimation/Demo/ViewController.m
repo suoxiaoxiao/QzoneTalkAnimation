@@ -122,7 +122,6 @@
     NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
     self.tableView.coefficient = @(0.1);
     [self.tableView insertRowsAtIndexPaths:@[index] withRowCustomAnimation:TableViewRowAnimation3DInsertMode];
-    
 }
 
 @end
